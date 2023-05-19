@@ -50,13 +50,20 @@ contract ERC1167FactoryTest is Test {
     }
 
 
-    function test1167CreateAndExecute() public {
+    function test1167CreateAndExecute(string calldata x) public {
+
         bytes32 salt = hex'00';
-        string memory msg = "TEST_MESSAGE";
+
+        string memory msg = x;
+
         address teAddr = testExecutorFactory.getCounterFactualAddress(salt);
+
         bytes memory callData = abi.encodeWithSelector(TestExecutor.execute.selector, msg);
+
         testExecutorFactory.createCloneAndExecute(salt, callData);
+
         TestExecutor te = TestExecutor(teAddr);
+
         assertEq(te.writing(), msg);
     }
 
@@ -81,11 +88,11 @@ contract ERC1167FactoryTest is Test {
     }
 
 
-    function testCreateAndExecute() public {
+    function testCreateAndExecute(string calldata y) public {
 
         address eoaOwner = makeAddr("eoaOwner");
 
-        string memory msg = "TEST_MESSAGE";
+        string memory msg = y;
 
         bytes memory callData = abi.encodeWithSelector(TestExecutor.execute.selector, msg);
 
@@ -95,7 +102,7 @@ contract ERC1167FactoryTest is Test {
 
         TestExecutor te = TestExecutor(cloneAddr);
 
-        assertEq(te.writing(), "TEST_MESSAGE");
+        assertEq(te.writing(), y);
 
     }
 
